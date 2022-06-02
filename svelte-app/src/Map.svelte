@@ -1,51 +1,47 @@
 <script>
-  // based on this example: https://observablehq.com/@mbostock/u-s-state-map
+  //References (in addition to svelte and d3 documentation):
+  //https://dev.to/learners/maps-with-d3-and-svelte-8p3
 
-  import us from "./county_analysis.json";
-  import { feature } from "topojson-client";
-  import { geoPath, geoIdentity } from "d3";
+  import * as d3 from "d3";
+  //   import { draw } from "svelte/transition";
+  //   import { quadInOut } from "svelte/easing";
+  export let counties = [];
+  export const width = 1200,
+    height = 600;
 
-  const states = feature(us).features;
-  const path = geoPath(geoIdentity().scale(0.6));
+  //   const mapWidth = 1200,
+  //     mapHeight = 600;
 
-  export let callback;
-  export let list = [];
-  let visibleState = "";
+  const projection = d3
+    .geoAlbersUsa()
+    .translate([width / 2, height / 2])
+    .scale([1300]);
+  const path = d3.geoPath(projection);
+
+  //   const namesExtent = d3.extent(counties, (d) => d.properties.class.length);
+  //   console.log(namesExtent);
+  //   const colorScale = d3
+  //     .scaleLinear()
+  //     .domain(namesExtent)
+  //     .range(["#feedde", "#fd8d3c"]);
 </script>
 
-<svg height={400} width={600}>
-  <g class="paths">
-    {#each states as state}
-      <path
-        class:selected={list.includes(state.properties.name)}
-        on:click={() => callback(state.properties.name)}
-        on:mouseenter={() => (visibleState = state.properties.name)}
-        on:mouseleave={() => (visibleState = "")}
-        d={path(state)}
-      />
-    {/each}
-  </g>
-  <g class="labels">
-    {#each states as state}
-      <text
-        class:visible={visibleState === state.properties.name}
-        x={path.centroid(state)[0]}
-        y={path.centroid(state)[1]}
-      >
-        {state.properties.name}
-      </text>
-    {/each}
-  </g>
-</svg>
+{#each counties as county}
+  <path
+    d={path(county)}
+    class="countyShape"
+    fill={colorScale(county.properties.class)}
+  />
+{/each}
 
 <style>
   path {
-    fill: white;
-    stroke: black;
-    stroke-width: 2px;
-    cursor: pointer;
+    /* fill: white; */
+    stroke: gray;
+    stroke-width: 1px;
+    /* cursor: pointer; */
   }
-  path.selected {
+  /* path.selected {
     fill: lightblue;
   }
   text {
@@ -56,5 +52,5 @@
   }
   text.visible {
     opacity: 1;
-  }
+  } */
 </style>

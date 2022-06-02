@@ -1,68 +1,48 @@
 <script>
+  import Map from "./Map.svelte";
+  import { onMount } from "svelte";
+  import * as d3 from "d3";
 
-	import Map from './Map.svelte'
-	import List from './List.svelte'
+  const mapURL =
+    "https://raw.githubusercontent.com/m0llyc00k/Summer2022/main/counties.json";
+  const width = 1200,
+    height = 700;
 
-	let list = [];
+  let counties = [];
 
-	$: stateCount = list.length;
-
-	function pluralize(noun, count) {
-		if (count === 1) {
-			return noun
-		}
-		return `${noun}s`
-	}
-
-	function onToggleState(state) {
-		const stateIndex = list.indexOf(state)
-		if (stateIndex === -1) {
-			list = [
-				...list,
-				state
-			].sort()
-		} else {
-			list = [
-				...list.slice(0, stateIndex),
-				...list.slice(stateIndex + 1)
-			]
-		}
-	}
-
-	function resetList() {
-		list = [];
-	}
-
+  onMount(async () => {
+    await d3.json(mapURL).then((geojson) => {
+      counties = geojson.features;
+      console.log(counties);
+    });
+  });
 </script>
 
-<main>
-	<h1>How many states have you been to?</h1>
-	<p>
-		You've been to {stateCount} {pluralize('state', stateCount)}! Click a state to add it to your list.
-		<button on:click={resetList}>Reset List</button>
-	</p>
-	<Map callback={onToggleState} list={list} />
-	<List list={list} />
+<main class="main-map">
+  <h1>Mapping Vulnerability in The Opioid Crisis</h1>
+  <svg {width} {height}>
+    <Map {counties} />
+  </svg>
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+  main {
+    text-align: center;
+    padding: 1em;
+    max-width: 240px;
+    margin: 0 auto;
+  }
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+  h1 {
+    color: #ff3e00;
+    /* text-transform: uppercase; */
+    font-size: 3em;
+    font-weight: 100;
+  }
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
 </style>
