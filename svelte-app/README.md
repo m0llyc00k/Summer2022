@@ -5,6 +5,8 @@
 # Mapping Vulnerability in the Opioid Crisis // Svelte + D3
 # Molly Cook
 
+<h3>Description of Data Used:</h3>
+
 Attribute clustering was implemented in a final analysis of the three variables identified as important factors in the ongoing opioid epidemic (overdose deaths per 100,000 people [2010-2020], opioid pills prescribed per 100 people [2012], and MAT providers [2022]). The three variables were run through a KMeans algorithm to create 5 clusters and determine levels of risk status in counties. Below are the results:
 <img width="387" alt="Screen Shot 2022-06-06 at 10 05 05 AM" src="https://user-images.githubusercontent.com/86888346/172176723-7975e84c-fbde-47f1-8f09-bf93ada40d28.png">
 In analyzing the above results, determinations on the risk status of counties with sufficient data were made based on rates of pills prescribed, rates of overdose deaths, and rates of MAT providers.
