@@ -7,15 +7,16 @@
   const mapURL =
     "https://raw.githubusercontent.com/m0llyc00k/Summer2022/main/counties.json";
 
-  const width = 1000,
+  const width = 1200,
     height = 550;
 
   let counties = [];
   let namesExtent = [];
-  let colorScale = () => {};
+  $: colorScale = () => {};
   let list = [];
+  let thisColor;
 
-  //get data
+  // get data
   onMount(async () => {
     await d3.json(mapURL).then((geojson) => {
       counties = geojson.features;
@@ -27,12 +28,15 @@
         .scaleOrdinal()
         .domain([1, 5])
         .range(["#3b528b", "#fde725", "#440154", "#21908d", "#5dc963"]);
+
+      //testing the colorscale function
       thisColor = colorScale(counties[50].properties.CL);
 
       console.log("extent:" + namesExtent + " / " + "color:" + thisColor);
     });
   });
 
+  //populate 'list' with clicked data
   function onToggleState(county) {
     const countyIndex = list.indexOf(county);
     if (countyIndex === -1) {
@@ -45,7 +49,7 @@
 
 <main class="main-map">
   <h1>Mapping Vulnerability in The Opioid Crisis</h1>
-  <svg {width} {height}>
+  <svg {width} {height} class="svg-map">
     <Map {counties} callback={onToggleState} {list} />
   </svg>
   <List {list} />
@@ -57,6 +61,10 @@
     padding: 1em;
     max-width: 240px;
     margin: 0 auto;
+  }
+
+  svg {
+    padding-bottom: 40px;
   }
 
   h1 {

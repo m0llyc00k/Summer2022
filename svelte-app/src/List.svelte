@@ -10,12 +10,12 @@
 
 <style>
   .county-list {
-    columns: 3;
+    columns: 1;
     min-height: 200px;
   }
 
   .county-list-item {
-    font-weight: bold;
-    font-size: 24px;
+    font-weight: normal;
+    font-size: 20px;
   }
 </style>
